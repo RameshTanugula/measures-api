@@ -32,18 +32,18 @@ app.get('/getdata', (req, res) => {
   });
 });
 app.post('/save', (req, res) => {
-    console.log(req.body, '$$$$')
-    
 const calulatedValues = commonService.caluculateValues(req.body.data);
 var preparedData = commonService.prepareData(calulatedValues);
-    let query = `INSERT INTO measures (title, years)
+    let query = `delete from measures; 
+    ALTER TABLE measures AUTO_INCREMENT = 1;
+    INSERT INTO measures (title, years)
     VALUES `+preparedData+`;`;
  
   sql.query(query, (err, result) => {
     if (err) {
     res.send({error: `Something went wrong ${err}`});
     } else{
-    res.send({res: result});
+    res.send({res: 'Data Saved Successfully'});
     }
   });
     

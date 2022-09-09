@@ -212,10 +212,6 @@ for (let i = 0; i < 10; i++) {
             + (compactCityArray[9] - compactCityArray[8]) / 2);
     }
 }
-// return reqData;
-console.log('1==>',populationCountArray, '2==>', compactCityArray, '3===>', economicPowerArray, 
-'4====>', walkingAccessibilityArray, '5====>',bicycleAccessibilityArray, 
-'6=====>',publicTransportAccessibilityArray, '7====>', motorVehicleAccessibilityArray);
 return [
     populationCountArray,
     compactCityArray,
