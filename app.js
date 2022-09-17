@@ -22,7 +22,7 @@ app.delete('/delete', (req, res) => {
   });
 });
 app.get('/getdata', (req, res) => {
-  let query = `select * from measures;`;
+  let query = `select * from measures; select * from measures_metadata;`;
   sql.query(query, (err, result) => {
     if (err) {
       res.send({ error: `Something went wrong ${err}` });
@@ -32,7 +32,7 @@ app.get('/getdata', (req, res) => {
   });
 });
 app.post('/save', (req, res) => {
-  const calulatedValues = commonService.caluculateValues(req.body.saveData);
+  const calulatedValues = commonService.caluculateValues(req.body.saveData?.sumArray);
   var preparedData = commonService.prepareData(calulatedValues);
   let query = `delete from measures; 
     ALTER TABLE measures AUTO_INCREMENT = 1;
@@ -43,7 +43,15 @@ app.post('/save', (req, res) => {
     if (err) {
       res.send({ error: `Something went wrong ${err}` });
     } else {
-      res.send({ res: 'Data Saved Successfully' });
+      const prepareMetadata = commonService.prepareMetadata(req.body.saveData.steps);
+      let dataQuery = `delete from measures_metadata; ALTER TABLE measures_metadata AUTO_INCREMENT = 1; insert into measures_metadata(title, nextButton, prevButton, json_data) VALUES ${prepareMetadata};`;
+      sql.query(dataQuery, (dataErr, dataResult) => {
+        if (err) {
+          res.send({ error: `Something went wrong ${dataErr}` });
+        } else {
+          res.send({ res: 'Data Saved Successfully' });
+        }
+      });
     }
   });
 
